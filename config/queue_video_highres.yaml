@@ -1,0 +1,84 @@
+seed: 17
+device: cpu
+confidence_threshold: 0.15
+inference_size: 960
+model_name: yolov8n.pt
+tracker: bytetrack
+video_source: data/videos/queue_video.MOV
+output_dir: output/queue_video_highres
+queue_rois:
+- name: classroom_queue
+  queue:
+  - - 355
+    - 450
+  - - 430
+    - 425
+  - - 545
+    - 455
+  - - 650
+    - 492
+  - - 780
+    - 540
+  - - 910
+    - 615
+  - - 900
+    - 690
+  - - 750
+    - 655
+  - - 630
+    - 610
+  - - 505
+    - 565
+  - - 405
+    - 525
+  service:
+  - - 340
+    - 445
+  - - 405
+    - 440
+  - - 450
+    - 460
+  - - 480
+    - 485
+  - - 500
+    - 520
+  - - 490
+    - 550
+  - - 460
+    - 555
+  - - 430
+    - 535
+  - - 400
+    - 515
+  - - 370
+    - 490
+  - - 350
+    - 465
+min_join_seconds: 0.25
+max_join_speed: 120.0
+exit_debounce_seconds: 0.8
+exit_margin_px: 0.0
+queue_exit_margin_px: 35.0
+min_service_seconds: 3.0
+service_margin_px: 40.0
+service_grace_seconds: 3.0
+service_use_box_center_fallback: false
+suspect_move_px: 40.0
+staff_min_dwell_seconds: 0.0 # rule 2 disabled to keep walk-ups from being classified as STAFF
+staff_initial_dwell_seconds: 2.0
+staff_max_speed: 35.0
+ignore_track_ids: []
+min_track_age_seconds: 0.5
+grace_period_seconds: 3.0
+lost_track_timeout_seconds: 2.0
+reassociate_distance_px: 80.0
+frame_edge_margin_px: 30
+trajectory_smoothing_window: 5
+evaluation_tolerance_seconds: 3.0
+ground_truth_path: data/ground_truth_highres.csv
+alert_seconds: 2.0
+font_scale: 0.55
+line_thickness: 2
+panel_alpha: 0.72
+synthetic_fps: 10
+synthetic_duration_seconds: 18

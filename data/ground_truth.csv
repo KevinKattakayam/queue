@@ -1,0 +1,10 @@
+track_id,visit_id,visit_type,start_time,end_time,service_start_time,person_label,really_joined,really_served,really_left
+20,visit_0001,QUEUE,4.87,13.54,,V1 dark shirt,y,y,n
+25,visit_0002,QUEUE,7.21,11.71,,V2 pink-striped,y,y,n
+32,visit_0003,QUEUE,10.74,23.29,,V3 white shirt,y,y,n
+39,visit_0004,QUEUE,12.88,28.52,,V4 maroon shirt,y,y,n
+47,visit_0005,QUEUE,19.22,33.29,,V5 pink shirt,y,n,y
+53,visit_0006,QUEUE,25.35,48.74,,V6 beige jacket,y,y,n
+217,visit_0008,QUEUE,49.74,57.51,,V8 checkered shirt,y,y,n
+263,visit_0009,QUEUE,60.80,63.00,,Pink-shirt return,y,y,n
+97,visit_0007,QUEUE,31.26,33.19,,V7 checkered shirt,y,n,y

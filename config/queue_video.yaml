@@ -1,0 +1,147 @@
+seed: 17
+device: cpu
+confidence_threshold: 0.15
+inference_size: 960
+model_name: yolov8n.pt
+tracker: bytetrack
+video_source: data/videos/queue_video.MOV
+output_dir: output/queue_video
+queue_rois:
+- name: classroom_queue
+  queue:
+  - - 355
+    - 450
+  - - 430
+    - 425
+  - - 545
+    - 455
+  - - 650
+    - 492
+  - - 780
+    - 540
+  - - 910
+    - 615
+  - - 900
+    - 690
+  - - 750
+    - 655
+  - - 630
+    - 610
+  - - 505
+    - 565
+  - - 405
+    - 525
+  service:
+  - - 340
+    - 445
+  - - 385
+    - 440
+  - - 430
+    - 455
+  - - 475
+    - 480
+  - - 495
+    - 505
+  - - 500
+    - 530
+  - - 485
+    - 545
+  - - 435
+    - 548
+  - - 390
+    - 528
+  - - 350
+    - 500
+  service_anchor:
+  - 390
+  - 480
+  staff_zone:
+  - - 245
+    - 340
+  - - 350
+    - 340
+  - - 350
+    - 430
+  - - 245
+    - 430
+staff_roi:
+- - 245
+  - 340
+- - 350
+  - 340
+- - 350
+  - 430
+- - 245
+  - 430
+staff_lock_sec: 2.0
+staff_ghost_sec: 3.0
+staff_max_bbox_height_px: 75.0
+staff_max_motion_px: 25.0
+staff_zone_margin_px: 0.0
+staff_zone_min_seconds: 2.0
+staff_dwell_seconds: 8.0
+service_radius_px: 55.0
+talk_radius_px: 30.0
+reach_protect_px: 70.0
+ring_service_seconds: 2.5
+service_reach_px: 30.0
+service_reach_grace_seconds: 1.0
+max_counter_hold_seconds: 30.0
+queue_entry_backdated_seconds: 1.0
+max_simultaneous_service: 1
+track_merge_px: 75.0
+track_merge_seconds: 3.0
+min_join_seconds: 0.25
+max_join_speed: 120.0
+exit_debounce_seconds: 0.8
+exit_margin_px: 0.0
+queue_exit_margin_px: 35.0
+min_service_seconds: 2.0
+service_min_dwell_sec: 2.0
+service_exit_grace_sec: 0.75
+min_track_sec: 0.5
+min_queue_sec: 1.0
+reassoc_gap_sec: 1.5
+reassoc_dist_px: 100.0
+max_reassoc_links_per_visit: 1
+reentry_sec: 10.0
+service_touch_seconds: 0.5
+direct_approach_px: 250.0
+direct_confirm_seconds: 1.5
+brief_upgrade_seconds: 5.5
+service_max_speed: 17.5
+short_contact_seconds: 1.0
+service_margin_px: 40.0
+service_grace_seconds: 3.0
+service_use_box_center_fallback: false
+suspect_move_px: 40.0
+staff_min_dwell_seconds: 0.0
+staff_initial_dwell_seconds: 2.0
+staff_max_speed: 35.0
+ignore_track_ids: []
+min_track_age_seconds: 0.5
+grace_period_seconds: 3.0
+lost_track_timeout_seconds: 2.0
+max_occlusion_seconds: 1.5
+reassociate_distance_px: 100.0
+appearance_min_similarity: 0.6
+max_link_direction_angle: 110.0
+duplicate_iou_threshold: 0.7
+duplicate_containment_threshold: 0.8
+overlap_iou_threshold: 0.15
+frame_edge_margin_px: 30
+trajectory_smoothing_window: 5
+evaluation_tolerance_seconds: 3.0
+service_time_tolerance_seconds: 3.0
+ground_truth_path: data/ground_truth.csv
+alert_seconds: 3.0
+font_scale: 0.55
+line_thickness: 2
+panel_alpha: 0.72
+synthetic_fps: 10
+synthetic_duration_seconds: 18
+service_flicker_grace_sec: 0.5
+reassoc_overlap_iou: 0.58
+reassoc_appearance_min_similarity: 0.78
+reassoc_min_birth_gap_sec: 0.1
+reassoc_min_height_ratio: 1.2

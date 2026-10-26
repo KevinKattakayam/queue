@@ -1,0 +1,8 @@
+output/
+data/videos/
+*.pt
+*.onnx
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/

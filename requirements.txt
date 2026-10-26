@@ -1,0 +1,8 @@
+opencv-python==4.10.0.84
+ultralytics==8.3.40
+lapx==0.5.11
+numpy==1.26.4
+PyYAML==6.0.2
+matplotlib==3.9.2
+pytest==8.3.3
+setuptools==78.1.0

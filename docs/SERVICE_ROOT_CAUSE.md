@@ -1,0 +1,13 @@
+# Baseline service bug reproduction and causes
+
+Baseline reproduction was performed before the strict replay edits using `output/queue_video/annotated.mp4`, `output/queue_video/events.csv`, and cached frames from `tracks_cache.json` (no detector rerun). The close-ups reproduced duplicate STAFF labels, early AT COUNTER labels, premature SERVED labels, and the placeholder service durations described by the report. The before-image is available at `/tmp/before_bug_reproduction.jpg` for this workspace session.
+
+| Bug | Baseline cause |
+|---|---|
+| B1, B3, B7: customers become STAFF at/after service; several STAFF at once | `main.py:1297-1300` adds every frame's box-bottom inside `staff_zone` to `frame_staff_ids`. `StaffZoneRegistry.observe` at `main.py:473-500` also persists zone-born/dwell IDs. There is no locked, single attendant identity in the baseline renderer. |
+| B2, B5: next people marked AT COUNTER while holder is still there | `main.py:958-966` starts/sets talking ownership and arrival based on talk-radius alone; the queue and reach paths below it make separate ownership decisions. Arrival display is not gated by the active single counter occupant. |
+| B4: customer SERVED while walking away | `main.py:1046-1057` turns any visit with a closest approach under `reach_protect_px` into a served event; `protect_near_service_departure` is also called at `main.py:1063` and lost-track branches. This bypasses observed stopped dwell. The cache has track 32 and ID 80 visible together near 24 s, so it does not provide a clean lost-track gap for the requested 32→80 recovery; the strict replay only links a genuinely lost, compatible track. |
+| B6: brief service and ~0.8 s dwell | The reach-slot path around `main.py:1003-1028` can mark the counter owner served independently of the stricter talking-spot branch. The reported dwell is therefore slot time/placeholder data, not a validated continuous service interval. |
+| B8: inconsistent event fields | `VisitMachine.service` in `state_machine.py:87-100` sets `queue_exit_time=now` at service. The legacy close-approach branch in `main.py:1048-1055` also sets queue exit equal to served time. `event_logger.py:10` exposes the legacy schema, while separate finalization paths fill counter/service fields inconsistently. |
+
+The strict replay is implemented in `src/queue_abandonment/fixed_replay.py` and writes isolated `*_fixed` artifacts. The baseline `main.py`/`VisitMachine` assignment path remains available for the original assignment workflow; run the strict replay command in README to get the locked-staff, observed-dwell output described in `docs/RESULTS.md`.

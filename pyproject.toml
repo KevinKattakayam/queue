@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools==78.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "queue-abandonment-detection"
+version = "1.0.0"
+description = "Video-time queue abandonment analysis using Ultralytics tracking"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]

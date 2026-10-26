@@ -1,0 +1,75 @@
+# All tunable values are centralized here; defaults are conservative demo defaults.
+seed: 17 # fixed seed for reproducible processing
+device: cpu # inference device: cpu or cuda
+confidence_threshold: 0.35 # minimum person detection confidence
+inference_size: 256 # very low CPU load; small/distant people may be missed more often than at 640
+model_name: yolov8n.pt # Ultralytics person detector weights; fetched if missing
+tracker: bytetrack # bytetrack or botsort
+video_source: data/videos/demo.mp4 # default demo input; CLI --video overrides
+output_dir: output # generated artifact directory
+queue_rois: # one or more independent queue/service pairs
+  - name: queue_1
+    queue: [[30, 80], [400, 80], [400, 440], [30, 440]]
+    service: [[410, 140], [620, 140], [620, 400], [410, 400]]
+    service_anchor: [515, 270]
+    staff_zone: []
+staff_roi: [[0, 0], [1, 0], [1, 1], [0, 1]] # replace with the seated attendant floor region before a real run
+staff_lock_sec: 2.0 # stationary time needed to lock the single staff identity
+staff_ghost_sec: 3.0 # keep locked staff identity during short occlusions
+staff_max_bbox_height_px: 75.0 # maximum box height for seated-staff confirmation
+staff_max_motion_px: 25.0 # maximum total foot motion during staff lock confirmation
+staff_zone_margin_px: 0.0 # exact staff ROI boundary; no expansion into customer lane
+staff_zone_min_seconds: 2.0 # compatibility setting; dynamic staff classification is disabled
+staff_dwell_seconds: 8.0 # compatibility setting; desk dwell never creates another staff identity
+service_radius_px: 55.0 # maximum customer foot distance from the service anchor
+max_simultaneous_service: 1 # only the closest eligible customer may accrue service dwell
+track_merge_px: 75.0 # join direct-service track fragments near the last known desk position
+track_merge_seconds: 3.0 # maximum allowed gap when joining a direct-service track fragment
+min_join_seconds: 1.0 # continuous dwell required to join
+max_join_speed: 35.0 # pixels/second allowed during join dwell
+exit_debounce_seconds: 0.8 # outside duration required to leave queue
+exit_margin_px: 0.0 # legacy alias; use queue_exit_margin_px for queue exit hysteresis
+queue_exit_margin_px: 30.0 # foot must pass this many pixels beyond queue edge before exit debounce starts
+min_service_seconds: 2.0 # required stopped dwell at the service spot
+service_min_dwell_sec: 2.0 # continuous low-speed service dwell before SERVED
+service_exit_grace_sec: 0.75 # release counter lock after this much time outside service ROI
+min_track_sec: 0.5 # minimum observed track age before abandonment can be emitted
+min_queue_sec: 1.0 # shorter queue tracks are NOT_A_VISIT
+reassoc_gap_sec: 1.5 # maximum gap allowed for track-ID recovery
+reassoc_dist_px: 80.0 # maximum distance for track-ID recovery
+max_reassoc_links_per_visit: 1 # cap ID changes per visit to avoid chaining unrelated nearby customers
+reentry_sec: 10.0 # DONE customer must leave the queue area this long before starting a new visit
+talk_radius_px: 30.0 # distance expansion around the configured service polygon
+reach_protect_px: 80.0 # close-approach service inference threshold; scene clips may tune this value
+ring_service_seconds: 2.5 # stopped dwell required for service from the outer reach ring
+service_time_tolerance_seconds: 3.0 # allowed service-start evaluation error
+service_touch_seconds: 0.5 # reaching the spot protects a queue visit but does not count as served
+service_max_speed: 25.0 # average smoothed foot speed ceiling in px/s for stopped service dwell
+service_margin_px: 40.0 # preserve a started service dwell through edge jitter within this distance
+service_grace_seconds: 3.0 # served visits remain terminal after leaving the service patch
+service_use_box_center_fallback: false # opt in only when feet are reliably occluded by the desk
+suspect_move_px: 40.0 # flag pending episodes with less foot movement for review
+staff_min_dwell_seconds: 16.0 # generic default; tune above observed customer dwell for each scene; 0 disables rule 2
+staff_initial_dwell_seconds: 2.0 # rule 1: first-video-frame service occupant must remain before becoming STAFF
+staff_max_speed: 35.0 # maximum average box-center speed in pixels/second for staff classification
+ignore_track_ids: [] # optional detector IDs that should always be treated as STAFF
+min_track_age_seconds: 0.5 # ignore fragmented tracks until they have persisted for half a second
+grace_period_seconds: 3.0 # time to return before confirming abandonment
+lost_track_timeout_seconds: 2.0 # preserve a disappearing queue visit
+max_occlusion_seconds: 1.5 # close non-pending visits after this long without a live detection
+reassociate_distance_px: 80.0 # max nearest-position recovery distance
+appearance_min_similarity: 0.60 # minimum cosine similarity of upper-body HSV histograms for identity links
+max_link_direction_angle: 110.0 # reject links whose recent travel direction differs by more than this angle
+duplicate_iou_threshold: 0.70 # suppress near-identical boxes from duplicate detections before state handling
+duplicate_containment_threshold: 0.80 # also suppress a smaller duplicate box mostly contained in another box
+overlap_iou_threshold: 0.15 # ambiguity only for active queue/pending tracks outside expanded service ROI
+frame_edge_margin_px: 30 # pixels from a frame boundary to treat disappearance as an exit
+trajectory_smoothing_window: 5 # number of foot points in moving average
+evaluation_tolerance_seconds: 3.0 # visit-start matching tolerance
+ground_truth_path: data/ground_truth.csv # manually annotated visit table
+alert_seconds: 3.0 # abandonment banner and last-position marker stay visible at least three seconds
+font_scale: 0.55 # annotation text scale
+line_thickness: 2 # annotation outline width
+panel_alpha: 0.72 # counter panel opacity (0..1)
+synthetic_fps: 10 # generated demo clip fps
+synthetic_duration_seconds: 18 # generated demo duration

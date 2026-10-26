@@ -1,0 +1,41 @@
+# Scene-specific settings for queue_video1.MOV (1280x720 camera view).
+seed: 17 # fixed random seed for reproducibility
+device: cpu # inference device: cpu or cuda; this clip is prepared for CPU
+confidence_threshold: 0.35 # minimum person detector confidence
+inference_size: 256 # very low CPU load; small/distant people can be missed more often than at 640
+model_name: yolov8n.pt # Ultralytics weights; downloaded automatically when possible
+tracker: bytetrack # bytetrack or botsort
+video_source: data/videos/queue_video1.MOV # source clip
+output_dir: output/queue_video1 # outputs for this clip
+queue_rois: # scene polygons; foot points are checked
+  - name: classroom_queue
+    queue: [[350, 320], [645, 320], [645, 635], [350, 635]] # students waiting / movement area
+    service: [[650, 275], [825, 275], [825, 505], [650, 505]] # instructor and table
+min_join_seconds: 1.0 # continuous queue dwell before membership
+max_join_speed: 35.0 # pixels/second maximum average join speed
+exit_debounce_seconds: 0.8 # continuous outside time before queue exit
+exit_margin_px: 0.0 # legacy alias; use queue_exit_margin_px for queue exit hysteresis
+queue_exit_margin_px: 30.0 # foot must pass this many pixels beyond queue edge before exit debounce starts
+min_service_seconds: 0.8 # continuous service ROI dwell
+service_margin_px: 40.0 # preserve a started service dwell through edge jitter within this distance
+service_grace_seconds: 3.0 # served visits remain terminal after leaving the service patch
+service_use_box_center_fallback: false # opt in only when feet are reliably occluded by the desk
+suspect_move_px: 40.0 # flag pending episodes with less foot movement for review
+staff_min_dwell_seconds: 16.0 # generic default; tune above observed customer dwell for this scene; 0 disables rule 2
+staff_initial_dwell_seconds: 2.0 # rule 1: first-video-frame service occupant must remain before becoming STAFF
+staff_max_speed: 35.0 # maximum average box-center speed in pixels/second for staff classification
+ignore_track_ids: [] # optional detector IDs that should always be treated as STAFF
+min_track_age_seconds: 0.5 # ignore fragmented tracks until they have persisted for half a second
+grace_period_seconds: 3.0 # return window before confirmed abandonment
+lost_track_timeout_seconds: 2.0 # short occlusion / ID switch hold
+reassociate_distance_px: 80.0 # maximum recovered position distance
+frame_edge_margin_px: 30 # frame-edge band for likely departures
+trajectory_smoothing_window: 5 # recent foot points in moving average
+evaluation_tolerance_seconds: 3.0 # ground-truth event matching tolerance
+ground_truth_path: data/ground_truth.csv # manual annotation template
+alert_seconds: 2.0 # visible alert duration
+font_scale: 0.55 # overlay text size
+line_thickness: 2 # annotation line width
+panel_alpha: 0.72 # counter panel opacity from 0 to 1
+synthetic_fps: 10 # synthetic demo frame rate
+synthetic_duration_seconds: 18 # synthetic demo duration
