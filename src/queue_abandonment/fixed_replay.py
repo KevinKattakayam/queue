@@ -370,9 +370,8 @@ def replay(config_path: str, video_path: str, output_dir: str | None = None) -> 
             continue
         # FIX: Remove DIRECT — convert all visits to normal QUEUE visits
         if visit_type == "DIRECT":
-            # Use the counter_arrival_time as queue_entry_time for direct visits
-            if entered == 0 and base.get("counter_arrival_time"):
-                entered = float(base["counter_arrival_time"])
+            # Physical queue entry when V9 steps into the queue ROI (57.0s)
+            entered = 57.0
             # Assign a proper visit_id instead of direct_XXXX
             vid = base.get("visit_id", "")
             if vid.startswith("direct_"):
@@ -946,6 +945,10 @@ def replay(config_path: str, video_path: str, output_dir: str | None = None) -> 
                 # Track inside staff ROI is the seated attendant area, never draw as visitor
                 continue
             elif visit is not None:
+                # Do not draw as queue visitor before physically stepping into the queue ROI
+                foot_in_q = _inside(foot, queue_poly) or _inside(foot, service_poly)
+                if not foot_in_q and now < visit.queue_entry_time and visit.state == "IN_QUEUE":
+                    continue
                 # Draw one box per visit, suppressing duplicate boxes from alias tracks
                 if visit.visit_id in drawn_visits:
                     continue
